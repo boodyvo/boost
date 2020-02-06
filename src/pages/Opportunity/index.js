@@ -31,6 +31,8 @@ const Opportunity = () => {
                         <div> ВПО: {currentOpportunity["ВПО"]} </div>
                         <div> СЖО: {currentOpportunity["СЖО"]} </div>
                         <div> Сироти: {currentOpportunity["Сироти"]} </div>
+                        <div> Контакти: {currentOpportunity["Контакти"]} </div>
+                        <div> Посилання: {currentOpportunity["Посилання"]} </div>
                     </div>
                     :
                     <div> Невідома можливість </div>
