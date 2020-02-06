@@ -4,7 +4,6 @@ const Index = (props) => {
     return (
         <div>
             <img src={props.data["Картинка"]} alt="Картинка" />
-            <
         </div>
     );
 };

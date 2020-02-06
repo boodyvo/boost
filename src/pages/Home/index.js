@@ -1,24 +1,25 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
-import {Context} from "../../store";
+import FormCheck from "react-bootstrap/FormCheck";
+import Form from "react-bootstrap/Form";
+import { Context } from "../../store";
+import { typesAssistance } from "../../config/consts";
 
 const Home = () => {
     const [state, dispatch] = useContext(Context);
 
     const handleFilterAllChange = () => {
-        const nextValue = !state.filters.all;
         dispatch({
             type: "SET_FILTER_ALL",
-            payload: nextValue,
+            payload: !state.filters.all,
         });
     };
 
     const handleFilterVPOChange = () => {
-        const nextValue = !state.filters.vpo;
         dispatch({
             type: "SET_FILTER_VPO",
-            payload: nextValue,
+            payload: !state.filters.vpo,
         });
     };
 
@@ -30,19 +31,55 @@ const Home = () => {
         });
     };
 
+    const handleTypeFilter = (type, e) => {
+        dispatch({
+            type: `SET_FILTER_${type.toUpperCase()}`,
+            payload: !state.filters[type],
+        });
+    };
+
     return (
         <div className="row">
             <div className="col-3 home--filters">
                 <div>
-                    <label>All</label>
-                    <input className="btn" type="checkbox" checked={state.filters.all} onChange={handleFilterAllChange} />
+                    <Form>
+                    <span>Тип</span>
+                    {
+                        Object.entries(typesAssistance).map( ([key, value]) => {
+                            return <div key={key}>
+                                <FormCheck
+                                    type="checkbox"
+                                    label={value}
+                                    className="btn"
+                                    checked={state.filters[key]}
+                                    onChange={handleTypeFilter.bind(this, key)}
+                                />
+                            </div>
+                        })
+                    }
+                    </Form>
+                </div>
+
+                <div>
+                    <FormCheck
+                        type="checkbox"
+                        label="Всі"
+                        className="btn"
+                        checked={state.filters.all}
+                        onChange={handleFilterAllChange}
+                    />
                 </div>
                 <div>
-                    <label>VPO</label>
-                    <input className="btn" type="checkbox" checked={state.filters.vpo} onChange={handleFilterVPOChange} />
+                    <FormCheck
+                        type="checkbox"
+                        label="ВПО"
+                        className="btn"
+                        checked={state.filters.vpo}
+                        onChange={handleFilterVPOChange}
+                    />
                 </div>
-                <input className="btn" type="range" min="0" max="100" step="1" value={state.filters.age} onChange={handleAgeChange} />
-                {state.filters.age}
+
+                <input className="btn" type="text" value={state.filters.age} onChange={handleAgeChange} />
             </div>
             <div className="col-9 home--data">
                 <ul>
@@ -52,6 +89,9 @@ const Home = () => {
                                 {/*<Card.Img variant="top" src={item["Картинка"]} />*/}
                                 <Card.Body>
                                     <Card.Title>{item["Назва організації"]}</Card.Title>
+                                    <Card.Text>
+                                        Тип: {item["Тип"]}
+                                    </Card.Text>
                                     <Card.Text>
                                         Опис: {item["Опис"]}
                                     </Card.Text>
